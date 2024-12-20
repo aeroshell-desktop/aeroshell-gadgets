@@ -1,12 +1,17 @@
 # Win Gadgets
 
-## what is this
-windows 7 gadgets for kde. remade by a total beginner in qml (tl:dr; possible jankiness in some areas)
+## Microsoft® Windows™ is a registered trademark of Microsoft® Corporation. This name is used for referential use only, and does not aim to usurp copyrights from Microsoft. Microsoft Ⓒ 2024 All rights reserved. All resources belong to Microsoft Corporation.
 
-## how 2 install
-move the folders to ```~/.local/share/plasma/plasmoids```
-if directory does not exist then create it yourself
+## Introduction
+This repository contains some remade Windows gadgets for use in KDE Plasma 6. Some gadgets are missing their expanded variants or have some slight inaccuracies.
 
-## todo
-1. clock
-2. calendar
+## Installation
+Move the plasmoids folder to ```~/.local/share/plasma/```
+
+## Screenshots
+Soon
+
+## TODO
+1. Calendar
+2. CPU usage
+3. Slideshow

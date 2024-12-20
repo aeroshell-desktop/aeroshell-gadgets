@@ -1,0 +1,32 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "mart@kde.org",
+                "Name": "Marco Martin"
+            },
+            {
+                "Name": "catpswin56"
+            }
+        ],
+        "Category": "Date and Time",
+        "Description": "A clock gadget",
+        "EnabledByDefault": true,
+        "FormFactors": [
+            "tablet",
+            "handset",
+            "desktop"
+        ],
+        "Icon": "preferences-system-time",
+        "Id": "io.gitgud.catpswin56.gadgets.clock",
+        "License": "GPL-2.0+",
+        "Name": "Clock gadget",
+        "Website": "https://gitgud.io/catpswin56/win-gadgets"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-Provides": [
+        "org.kde.plasma.time",
+        "org.kde.plasma.date"
+    ]
+}
