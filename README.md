@@ -5,13 +5,35 @@
 ## Introduction
 This repository contains some remade Windows gadgets for use in KDE Plasma 6. Some gadgets are missing their expanded variants or have some slight inaccuracies.
 
+
 ## Installation
 Move the plasmoids folder to ```~/.local/share/plasma/```
 
+
 ## Screenshots
-Soon
+
+### Clock
+Default style:
+
+<img src="screenshots/clock-style1.png">
+
+System style:
+
+<img src="screenshots/clock-style2.png">
+
+### Weather
+
+<img src="screenshots/weather.png">
+
+### Image slideshow
+
+<img src="screenshots/slideshow.png">
+
+### RSS Feeds
+
+<img src="screenshots/rss.png">
+
 
 ## TODO
 1. Calendar
 2. CPU usage
-3. Slideshow
