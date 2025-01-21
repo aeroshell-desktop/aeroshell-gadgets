@@ -1,6 +1,6 @@
 import QtQuick
 import QtQml.XmlListModel
-import QtQuick.Controls
+import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 
 import Qt5Compat.GraphicalEffects
@@ -16,7 +16,7 @@ PlasmoidItem {
     width: 130
     height: 173
 
-    property var url: Plasmoid.configuration.url
+    readonly property var url: Plasmoid.configuration.url
 
     Plasmoid.backgroundHints: "NoBackground"
 
@@ -57,6 +57,7 @@ PlasmoidItem {
 
         XmlListModelRole { name: "title"; elementName: "title" }
         XmlListModelRole { name: "pubDate"; elementName: "pubDate" }
+        XmlListModelRole { name: "link"; elementName: "link" }
         XmlListModelRole { name: "content"; elementName: "encoded" }
         XmlListModelRole { name: "description"; elementName: "description" }
         XmlListModelRole { name: "creator"; elementName: "creator" }
@@ -113,6 +114,7 @@ PlasmoidItem {
 
                     Layout.fillWidth: true
 
+                    verticalAlignment: Text.AlignVCenter
                     wrapMode: Text.NoWrap
                     maximumLineCount: 1
                     elide: Text.ElideRight
@@ -134,6 +136,7 @@ PlasmoidItem {
 
                         Layout.fillWidth: true
 
+                        verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.NoWrap
                         maximumLineCount: 1
                         elide: Text.ElideRight
@@ -151,6 +154,7 @@ PlasmoidItem {
 
                         Layout.fillWidth: true
 
+                        verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.NoWrap
                         maximumLineCount: 1
                         elide: Text.ElideRight
@@ -186,11 +190,15 @@ PlasmoidItem {
             }
 
             MouseArea {
-                acceptedButtons: Qt.LeftButton
                 anchors.fill: parent
+
+                cursorShape: Qt.PointingHandCursor
+                acceptedButtons: Qt.LeftButton
+
                 onClicked: {
                     moreFlyout.itemIndex = index // comment about this is in Flyout.qml
                     moreFlyout.title = title
+                    moreFlyout.link = link
                     moreFlyout.creator = creator
 
                     if(content == "") {
@@ -205,6 +213,27 @@ PlasmoidItem {
                 }
             }
         }
+    }
+
+    Text {
+        id: noFeed
+
+        anchors {
+            right: bg.right
+            left: bg.left
+
+            verticalCenter: bg.verticalCenter
+            verticalCenterOffset: -Kirigami.Units.smallSpacing * 4
+        }
+
+        text: "No feed items to display."
+        color: "white"
+        horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.WordWrap
+        rightPadding: Kirigami.Units.smallSpacing * 2
+        leftPadding: rightPadding
+
+        visible: url == ""
     }
 
     Item {
@@ -277,9 +306,9 @@ PlasmoidItem {
 
                 Layout.fillWidth: true
 
-                renderType: Text.NativeRendering
                 color: "white"
                 text: list.currentIndex + " - " + list.count
+                renderType: Text.NativeRendering
                 font.hintingPreference: Font.PreferFullHinting
                 font.kerning: false
 
@@ -315,6 +344,8 @@ PlasmoidItem {
                 }
             }
         }
+
+        visible: list.count != 0
     }
 
     ListView {
@@ -352,7 +383,7 @@ PlasmoidItem {
 
         opacity: 0.6
 
-        visible: list.currentIndex < list.count
+        visible: list.currentIndex < list.count && list.count != 0
     }
 
     Image  {
@@ -371,6 +402,8 @@ PlasmoidItem {
             NumberAnimation { target: busyIndicator; property: "frameNumber"; to: 17; duration: 900 }
             NumberAnimation { target: busyIndicator; property: "frameNumber"; to: 0; duration: 0 }
         }
+
+        onVisibleChanged: if(url == "") visible = false;
     }
 
     Flyout {
@@ -395,9 +428,11 @@ PlasmoidItem {
                     anchors.fill: parent
                     anchors.margins: Kirigami.Units.smallSpacing
 
+                    spacing: 0
+
                     ColumnLayout {
                         Layout.leftMargin: Kirigami.Units.smallSpacing*2
-                        Layout.preferredHeight: 31
+                        Layout.preferredHeight: 28
 
                         spacing: -4
 
@@ -412,6 +447,10 @@ PlasmoidItem {
                             verticalAlignment: Text.AlignVCenter
                             font.pointSize: 10
                             font.bold: true
+
+                            renderType: Text.NativeRendering
+                            font.hintingPreference: Font.PreferFullHinting
+                            font.kerning: false
                         }
                         Text {
                             Layout.preferredWidth: 280
@@ -423,21 +462,50 @@ PlasmoidItem {
                             maximumLineCount: 1
                             verticalAlignment: Text.AlignVCenter
                             font.pointSize: 8
+
+                            renderType: Text.NativeRendering
+                            font.hintingPreference: Font.PreferFullHinting
+                            font.kerning: false
                         }
                     }
-                    PlasmaComponents.ScrollView {
+                    QQC2.ScrollView {
                         Layout.leftMargin: Kirigami.Units.smallSpacing
-                        Layout.preferredHeight: 181
-                        Layout.preferredWidth: 292
+                        Layout.rightMargin: Kirigami.Units.smallSpacing
+                        Layout.preferredHeight: 173
+                        Layout.preferredWidth: 288
 
                         ColumnLayout {
                             width: 286
 
                             Text {
-                                Layout.preferredWidth: 286
+                                text: "Open link in browser"
+                                color: "#2e6998"
+
+                                renderType: Text.NativeRendering
+                                font.hintingPreference: Font.PreferFullHinting
+                                font.kerning: false
+                                font.underline: linkMa.containsMouse
+
+                                MouseArea {
+                                    id: linkMa
+
+                                    anchors.fill: parent
+
+                                    hoverEnabled: true
+
+                                    onClicked: Qt.openUrlExternally(moreFlyout.link)
+                                }
+                            }
+
+                            Text {
+                                Layout.preferredWidth: 250
 
                                 text: moreFlyout.content
                                 wrapMode: Text.WordWrap
+
+                                renderType: Text.NativeRendering
+                                font.hintingPreference: Font.PreferFullHinting
+                                font.kerning: false
                             }
                         }
                     }

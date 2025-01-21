@@ -6,18 +6,18 @@
                 "Name": "catpswin56"
             }
         ],
-        "Category": "Online Services",
-        "Description": "RSS feed gadget",
+        "Category": "Gadgets",
+        "Description": "Follow the latest news, sports and entertainment titles.",
         "EnabledByDefault": true,
         "FormFactors": [
             "tablet",
             "handset",
             "desktop"
         ],
-        "Icon": "application-rss.xml",
+        "Icon": "rssfeeds-gadget",
         "Id": "io.gitgud.catpswin56.gadgets.rssfeeds",
         "License": "GPL-2.0+",
-        "Name": "RSS feed gadget",
+        "Name": "RSS Feeds",
         "Website": "https://gitgud.io/catpswin56/win-gadgets"
     },
     "X-Plasma-API-Minimum-Version": "6.0"

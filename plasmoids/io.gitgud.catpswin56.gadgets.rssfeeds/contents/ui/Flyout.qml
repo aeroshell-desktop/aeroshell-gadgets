@@ -13,6 +13,7 @@ PlasmaCore.Dialog {
 
     property int itemIndex // to identify which item should have the selected state
     property string title: "undefined"
+    property string link: "undefined"
     property string creator: "undefined"
     property string content: "undefined"
 }
