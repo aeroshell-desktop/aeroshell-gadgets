@@ -240,7 +240,7 @@ PlasmoidItem {
         id: bottomControls
 
         anchors {
-            bottom: parent.bottom
+            bottom: bg.bottom
             bottomMargin: Kirigami.Units.smallSpacing
 
             horizontalCenter: bg.horizontalCenter
@@ -350,13 +350,17 @@ PlasmoidItem {
 
     ListView {
         id: list
+
+        anchors {
+            fill: bg
+
+            topMargin: Kirigami.Units.smallSpacing - 1
+            bottomMargin: bottomControls.height + (Kirigami.Units.smallSpacing * 2)
+            // rightMargin: Kirigami.Units.smallSpacing*2
+            leftMargin: Kirigami.Units.smallSpacing - 1
+        }
+
         clip: true
-        width: parent.width
-        anchors.fill: parent
-        anchors.topMargin: Kirigami.Units.smallSpacing
-        anchors.bottomMargin: bottomControls.height + Kirigami.Units.smallSpacing*4
-        anchors.rightMargin: Kirigami.Units.smallSpacing*2
-        anchors.leftMargin: Kirigami.Units.smallSpacing*3 + Kirigami.Units.smallSpacing/4
         interactive: false
         spacing: 0
         model: xmlModel
@@ -367,12 +371,15 @@ PlasmoidItem {
     Rectangle {
         id: fadeGradient
 
-        anchors.right: list.right
-        anchors.rightMargin: 8
-        anchors.left: list.left
-        anchors.leftMargin: 1
-        anchors.bottom: bottomControls.top
-        anchors.bottomMargin: Kirigami.Units.smallSpacing/2
+        anchors {
+            bottom: bottomControls.top
+            right: list.right
+            left: list.left
+
+            bottomMargin: Kirigami.Units.smallSpacing / 2
+            rightMargin: Kirigami.Units.smallSpacing + 1
+            leftMargin: 1
+        }
 
         height: 35
 
