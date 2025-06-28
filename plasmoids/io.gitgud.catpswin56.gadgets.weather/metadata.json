@@ -58,7 +58,7 @@
         "Description": "Forecast and current conditions",
         "EnabledByDefault": true,
         "Icon": "weather-clear",
-        "Id": "io.gitgud.catpswin56.gadget.weather",
+        "Id": "io.gitgud.catpswin56.gadgets.weather",
         "License": "GPL-2.0+",
         "Name": "Weather gadget",
         "Website": "https://gitgud.io/catpswin56/win-gadgets"

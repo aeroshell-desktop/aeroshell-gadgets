@@ -13,8 +13,9 @@ import org.kde.kirigami as Kirigami
 
 PlasmoidItem {
     id: window
-    width: 130
-    height: 173
+
+    Layout.preferredWidth: 130
+    Layout.preferredHeight: 173
 
     readonly property var url: Plasmoid.configuration.url
 

@@ -14,9 +14,6 @@ KCM.SimpleKCM {
     id: root
 
     property alias cfg_randomize: randomizeCheckBox.checked
-    property alias cfg_pauseOnMouseOver: pauseOnMouseOverCheckBox.checked
-    property alias cfg_leftClickOpenImage: leftClickOpenImageCheckBox.checked
-    //property alias cfg_showCountdown: showCountdownCheckBox.checked
     property alias cfg_fillMode: root.fillMode
 
     property int cfg_interval: 0
