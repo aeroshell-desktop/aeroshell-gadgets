@@ -5,7 +5,6 @@
  */
 
 import QtQuick
-
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 
@@ -60,7 +59,7 @@ ColumnLayout {
         height: 67
 
         PlasmaExtras.PlaceholderMessage {
-            anchors.centerIn: parent
+            anchors.centerIn: background
             // when not in panel, a configure button is already shown for needsConfiguration
             visible: (root.status === Util.NeedsConfiguration) && (Plasmoid.formFactor === PlasmaCore.Types.Vertical || Plasmoid.formFactor === PlasmaCore.Types.Horizontal)
             iconName: "mark-location"
@@ -98,21 +97,13 @@ ColumnLayout {
 
             visible: observationModel.temperature == "" && generalModel.location != "" || generalModel.currentConditionIconName == "weather-not-available"
 
-            Item {
-                Layout.fillWidth: true
-            }
+            Item { Layout.fillWidth: true }
 
-            Image {
-                source: "resources/info.png"
-            }
+            Image { source: "resources/info.png" }
 
-            Text {
-                text: "Not available"
-            }
+            Text { text: i18n("Not available") }
 
-            Item {
-                Layout.fillWidth: true
-            }
+            Item { Layout.fillWidth: true }
         }
 
         Text {
@@ -124,7 +115,9 @@ ColumnLayout {
             elide: Text.ElideRight
             text: observationModel.temperature
             font.pointSize: 16
-            color: typeof currentWeatherTextColor[generalModel.currentConditionIconName] != "undefined" ? currentWeatherTextColor[generalModel.currentConditionIconName] : "black" // fallback
+            color: typeof currentWeatherTextColor[generalModel.currentConditionIconName] != "undefined" ?
+                    currentWeatherTextColor[generalModel.currentConditionIconName]
+                    : "black" // fallback
             horizontalAlignment: Text.AlignRight
             visible: !infoRow.visible
         }
@@ -137,7 +130,9 @@ ColumnLayout {
             elide: Text.ElideRight
             text: generalModel.location
             font.pointSize: 9
-            color: typeof currentWeatherTextColor[generalModel.currentConditionIconName] != "undefined" ? currentWeatherTextColor[generalModel.currentConditionIconName] : "black" // fallback
+            color: typeof currentWeatherTextColor[generalModel.currentConditionIconName] != "undefined" ?
+                currentWeatherTextColor[generalModel.currentConditionIconName]
+                : "black" // fallback
             horizontalAlignment: Text.AlignRight
             visible: !infoRow.visible
         }

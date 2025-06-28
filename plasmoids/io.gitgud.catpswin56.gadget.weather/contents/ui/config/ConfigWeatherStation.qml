@@ -20,15 +20,15 @@ KCM.ScrollViewKCM {
     property string cfg_source
     property alias cfg_updateInterval: updateIntervalSpin.value
 
-    readonly property var providers: Plasmoid.providers
-
     readonly property var sourceDetails: cfg_source ? cfg_source.split('|') : ""
     readonly property bool hasSource: sourceDetails.length > 2
-    readonly property bool canSearch: !!searchStringEdit.text && Object.keys(providers).length
+    readonly property bool canSearch: !!searchStringEdit.text && locationListModel.hasProviders
 
     // The model property `isValidatingInput` doesn't account for the timer delay
     // We use a custom property to provide a more responsive feedback
     property bool isSearching: false
+
+    extraFooterTopPadding: true
 
     LocationListModel {
         id: locationListModel
@@ -80,7 +80,7 @@ KCM.ScrollViewKCM {
                 // Keep it visible to avoid height changes which can confuse AppletConfigurationPage
                 opacity: hasSource ? 1 : 0
 
-                text: hasSource ? providers[sourceDetails[0]] : ""
+                text: hasSource ? locationListModel.providerName(sourceDetails[0]) : ""
                 textFormat: Text.PlainText
             }
 
@@ -97,7 +97,7 @@ KCM.ScrollViewKCM {
             Layout.fillWidth: true
 
             focus: true
-            enabled: Object.keys(providers).length > 0
+            enabled: locationListModel.hasProviders
             placeholderText: hasSource ? i18nc("@info:placeholder", "Enter new location") : i18nc("@info:placeholder", "Enter location")
 
             Timer {
@@ -108,7 +108,7 @@ KCM.ScrollViewKCM {
                         locationListModel.clear();
                         return;
                     }
-                    locationListModel.searchLocations(searchStringEdit.text, Object.keys(providers));
+                    locationListModel.searchLocations(searchStringEdit.text);
                 }
             }
 
@@ -146,7 +146,7 @@ KCM.ScrollViewKCM {
         focus: true
         activeFocusOnTab: true
         keyNavigationEnabled: true
-        enabled: Object.keys(providers).length > 0
+        enabled: locationListModel.hasProviders
 
         onCurrentIndexChanged: {
             const source = locationListModel.valueForListIndex(locationListView.currentIndex);

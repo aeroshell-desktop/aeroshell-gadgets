@@ -186,15 +186,5 @@ KCM.SimpleKCM {
             Kirigami.FormData.label: i18nc("@label:checkbox", "General:")
             text: i18nc("@option:check", "Randomize order")
         }
-
-        CheckBox {
-            id: pauseOnMouseOverCheckBox
-            text: i18nc("@option:check", "Pause slideshow when cursor is over image")
-        }
-
-        CheckBox {
-            id: leftClickOpenImageCheckBox
-            text: i18nc("@option:check", "Click on image to open in external application")
-        }
     }
 }

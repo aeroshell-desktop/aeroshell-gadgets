@@ -6,6 +6,7 @@
  */
 
 import QtQuick
+import QtQuick.Layouts
 
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
@@ -16,7 +17,10 @@ import org.kde.plasma.private.weather
 PlasmoidItem {
     id: root
 
-    Plasmoid.backgroundHints: "NoBackground";
+    Plasmoid.backgroundHints: "NoBackground"
+
+    Layout.preferredWidth: Plasmoid.configuration.expanded ? 264 : 130
+    Layout.preferredHeight: Plasmoid.configuration.expanded ? 194 : 67
 
     readonly property bool inPanel: [
         PlasmaCore.Types.TopEdge,
@@ -27,10 +31,10 @@ PlasmoidItem {
 
     readonly property string weatherSource: Plasmoid.configuration.source
     readonly property int updateInterval: Plasmoid.configuration.updateInterval
-    readonly property int displayTemperatureUnit: Plasmoid.configuration.temperatureUnit
-    readonly property int displaySpeedUnit: Plasmoid.configuration.speedUnit
-    readonly property int displayPressureUnit: Plasmoid.configuration.pressureUnit
-    readonly property int displayVisibilityUnit: Plasmoid.configuration.visibilityUnit
+    readonly property int displayTemperatureUnit: Plasmoid.configuration.temperatureUnit || TemperatureUnitListModel.defaultUnit
+    readonly property int displaySpeedUnit: Plasmoid.configuration.speedUnit || WindSpeedUnitListModel.defaultUnit
+    readonly property int displayPressureUnit: Plasmoid.configuration.pressureUnit ||  PressureUnitListModel.defaultUnit
+    readonly property int displayVisibilityUnit: Plasmoid.configuration.visibilityUnit || VisibilityUnitListModel.defaultUnit
 
     property int status: Util.Normal
 
@@ -65,7 +69,7 @@ PlasmoidItem {
         model["conditionIconName"] = conditionIconName ? Util.existingWeatherIconName(conditionIconName) : "weather-none-available";
 
         const temperature = getNumber("Temperature");
-        model["temperature"] = temperature !== null ? Util.temperatureToDisplayString(displayTemperatureUnit, temperature, reportTemperatureUnit, true, true) : "";
+        model["temperature"] = temperature !== null ? Util.temperatureToDisplayString(displayTemperatureUnit, temperature, reportTemperatureUnit, true, false) : "";
 
 
         // "Feels like" temperature indices. They are mutually exclusive as
@@ -300,23 +304,17 @@ PlasmoidItem {
         return model;
     }
 
-    function symbolicizeIconName(iconName) {
-        const symbolicSuffix = "-symbolic";
-        if (iconName.endsWith(symbolicSuffix)) {
-            return iconName;
-        }
-
-        return iconName + symbolicSuffix;
-    }
-
     P5Support.DataSource {
         id: weatherDataSource
 
         readonly property var currentData: data[weatherSource]
 
         engine: "weather"
-        connectedSources: weatherSource
         interval: updateInterval * 60 * 1000
+        Binding on connectedSources {
+            when: weatherSource !== ""
+            value: weatherSource
+        }
         onConnectedSourcesChanged: {
             if (weatherSource) {
                 status = Util.Connecting
@@ -343,10 +341,9 @@ PlasmoidItem {
 
     Plasmoid.icon: {
         let iconName;
-        // workaround for now to ensure "Please configure" tooltip
-        // TODO: remove when configurationRequired works
+
         if (status === Util.NeedsConfiguration) {
-            iconName = "configure";
+            iconName = "weather-clouds-symbolic";
         } else {
             iconName = generalModel.currentConditionIconName;
         }
@@ -359,71 +356,11 @@ PlasmoidItem {
     }
     Plasmoid.busy: status === Util.Connecting
     Plasmoid.configurationRequired: status === Util.NeedsConfiguration
+    Plasmoid.status: status === Util.NeedsConfiguration ? PlasmaCore.Types.PassiveStatus : PlasmaCore.Types.ActiveStatus
 
-    toolTipMainText: (status === Util.NeedsConfiguration) ?
-        i18nc("@info:tooltip %1 is the translated plasmoid name", "Click to configure %1", Plasmoid.title) :
-        generalModel.location
+    Expanded { anchors.fill: parent; visible: Plasmoid.configuration.expanded }
+    Unexpanded { anchors.fill: parent; visible: !Plasmoid.configuration.expanded }
 
-    toolTipSubText: {
-        if (!generalModel.location) {
-            return "";
-        }
-        const tooltips = [];
-        const temperature = Plasmoid.configuration.showTemperatureInTooltip ? observationModel.temperature : null;
-        if (observationModel.conditions && temperature) {
-            tooltips.push(i18nc("weather condition + temperature",
-                                "%1 %2", observationModel.conditions, temperature));
-        } else if (observationModel.conditions || temperature) {
-            tooltips.push(observationModel.conditions || temperature);
-        }
-        if (Plasmoid.configuration.showWindInTooltip && observationModel.windSpeed) {
-            if (observationModel.windDirection) {
-                if (observationModel.windGust) {
-                    tooltips.push(i18nc("winddirection windspeed (windgust)", "%1 %2 (%3)",
-                                        observationModel.windDirection, observationModel.windSpeed, observationModel.windGust));
-                } else {
-                    tooltips.push(i18nc("winddirection windspeed", "%1 %2",
-                                        observationModel.windDirection, observationModel.windSpeed));
-                }
-            } else {
-                tooltips.push(observationModel.windSpeed);
-            }
-        }
-        if (Plasmoid.configuration.showPressureInTooltip && observationModel.pressure) {
-            if (observationModel.pressureTendency) {
-                tooltips.push(i18nc("pressure (tendency)", "%1 (%2)",
-                                    observationModel.pressure, observationModel.pressureTendency));
-            } else {
-                tooltips.push(observationModel.pressure);
-            }
-        }
-        if (Plasmoid.configuration.showHumidityInTooltip && observationModel.humidity) {
-            tooltips.push(i18n("Humidity: %1", observationModel.humidity));
-        }
-
-        return tooltips.join("\n");
-    }
-
-    // Only exists because the default CompactRepresentation doesn't expose:
-    // - Icon overlays, or a generic way to overlay something on top of the icon
-    // - The ability to show text below or beside the icon
-    // TODO remove once it gains those features.
-    compactRepresentation: CompactRepresentation {  }
-
-    fullRepresentation: FullRepresentation {  }
-
-    Binding {
-        target: Plasmoid
-        property: "needsToBeSquare"
-        value: (Plasmoid.containmentType & PlasmaCore.Types.CustomEmbeddedContainment)
-                | (Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentForcesSquarePlasmoids)
-    }
-
-    onWeatherSourceChanged: {
-        if (weatherSource.length === 0) {
-            status = Util.NeedsConfiguration
-        }
-    }
-
+    onWeatherSourceChanged: if(weatherSource.length === 0) status = Util.NeedsConfiguration
     Component.onCompleted: weatherSourceChanged()
 }

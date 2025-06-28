@@ -8,28 +8,28 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
-import org.kde.draganddrop 2.0 as DragDrop
+import org.kde.draganddrop as DragDrop
+import org.kde.kquickcontrolsaddons
+import org.kde.kirigami as Kirigami
 
-import org.kde.plasma.plasmoid 2.0
+import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
-import org.kde.kirigami 2.20 as Kirigami
-import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.kquickcontrolsaddons 2.0
+import org.kde.plasma.components as PlasmaComponents3
 
-import org.kde.plasma.private.mediaframe 2.0
+import org.kde.plasma.private.mediaframe
 
 PlasmoidItem {
     id: main
 
     MediaFrame {
         id: items
-        random: plasmoid.configuration.randomize
+        random: Plasmoid.configuration.randomize
     }
 
     preferredRepresentation: fullRepresentation
 
-    switchWidth: 130
-    switchHeight: 100
+    Layout.preferredWidth: 130
+    Layout.preferredHeight: 100
 
     Plasmoid.backgroundHints: "NoBackground"
 
@@ -67,7 +67,7 @@ PlasmoidItem {
     }
 
     function loadPathList() {
-        var list = plasmoid.configuration.pathList
+        var list = Plasmoid.configuration.pathList
         items.clear()
         for(var i in list) {
             var item = JSON.parse(list[i])
@@ -83,7 +83,7 @@ PlasmoidItem {
     }
 
     Connections {
-        target: plasmoid.configuration
+        target: Plasmoid.configuration
         function onPathListChanged() {
             loadPathList()
         }
@@ -98,9 +98,9 @@ PlasmoidItem {
         // work-around for QTBUG-67773:
         // C++ object property of type QVariant(QStringList) is not updated on changes from QML
         // so explicitly create a deep JSValue copy, modify that and then set it back to overwrite the old
-        var updatedList = plasmoid.configuration.pathList.slice();
+        var updatedList = Plasmoid.configuration.pathList.slice();
         updatedList.push(JSON.stringify(item));
-        plasmoid.configuration.pathList = updatedList;
+        Plasmoid.configuration.pathList = updatedList;
     }
 
     function nextItem() {
@@ -150,9 +150,9 @@ PlasmoidItem {
 
     Timer {
         id: nextTimer
-        interval: (plasmoid.configuration.interval*1000)
+        interval: (Plasmoid.configuration.interval*1000)
         repeat: true
-        running: hasItems && !pause
+        running: true
         onTriggered: nextItem()
     }
 
@@ -165,24 +165,13 @@ PlasmoidItem {
 
         Item {
             id: imageView
-            visible: hasItems
+
             anchors {
                 fill: parent
                 leftMargin: Kirigami.Units.smallSpacing
                 rightMargin: Kirigami.Units.smallSpacing + Kirigami.Units.smallSpacing/2
                 topMargin: Kirigami.Units.smallSpacing + Kirigami.Units.smallSpacing/4
                 bottomMargin: Kirigami.Units.smallSpacing + Kirigami.Units.smallSpacing/4
-            }
-
-            PlasmaComponents3.Button {
-                anchors.centerIn: parent
-
-                visible: !hasItems
-                icon.name: "configure"
-                text: i18nc("@action:button", "Configure…")
-                onClicked: {
-                    Plasmoid.internalAction("configure").trigger();
-                }
             }
 
             MouseArea {
@@ -263,7 +252,7 @@ PlasmoidItem {
                                 propagateComposedEvents: true
                                 preventStealing: false
 
-                                onClicked: nextTimer.running ? (nextTimer.running = false) : (nextTimer.running = true)
+                                onClicked: nextTimer.running = !nextTimer.running;
                             }
                         }
                         Image {
@@ -333,7 +322,7 @@ PlasmoidItem {
 
 
                 anchors.fill: parent
-                fillMode: plasmoid.configuration.fillMode
+                fillMode: Plasmoid.configuration.fillMode
 
                 opacity: 0
 
@@ -348,7 +337,7 @@ PlasmoidItem {
                 id: frontImage
 
                 anchors.fill: parent
-                fillMode: plasmoid.configuration.fillMode
+                fillMode: Plasmoid.configuration.fillMode
 
                 cache: false
                 source: activeSource
