@@ -1,37 +1,38 @@
 # Win Gadgets
 
-## Microsoft® Windows™ is a registered trademark of Microsoft® Corporation. This name is used for referential use only, and does not aim to usurp copyrights from Microsoft. Microsoft Ⓒ 2024 All rights reserved. All resources belong to Microsoft Corporation.
+## Microsoft® Windows™ is a registered trademark of Microsoft® Corporation. This name is used for referential use only, and does not aim to usurp copyrights from Microsoft. Microsoft Ⓒ 2025 All rights reserved. All resources belong to Microsoft Corporation.
 
 ## Introduction
+
 This repository contains some remade Windows gadgets for use in KDE Plasma 6. Some gadgets are missing their expanded variants or have some slight inaccuracies.
 
 
 ## Installation
-Move the plasmoids folder to ```~/.local/share/plasma/```
+
+Move the plasmoids folder to ```~/.local/share/plasma/``` and add the plasmoids onto your desktop.
 
 
 ## Screenshots
 
 ### Clock
-Default style:
 
-<img src="screenshots/clock-style1.png">
+![clock](screenshots/clock.png)
 
-System style:
+Available styles:
 
-<img src="screenshots/clock-style2.png">
+![clock](screenshots/clock-styles.png)
 
 ### Weather
 
-<img src="screenshots/weather.png">
+![clock](screenshots/weather.png)
 
 ### Image slideshow
 
-<img src="screenshots/slideshow.png">
+![clock](screenshots/slideshow.png)
 
 ### RSS Feeds
 
-<img src="screenshots/rss.png">
+![clock](screenshots/rss.png)
 
 
 ## TODO

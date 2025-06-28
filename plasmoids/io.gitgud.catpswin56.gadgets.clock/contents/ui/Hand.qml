@@ -6,57 +6,26 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.0
+import QtQuick
 
-import org.kde.ksvg 1.0 as KSvg
-import org.kde.kirigami 2.20 as Kirigami
+import org.kde.ksvg as KSvg
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.plasmoid
 
-KSvg.SvgItem {
+Image {
     id: handRoot
 
     property alias rotation: rotation.angle
-    property double svgScale
-    property double horizontalRotationOffset: 0
-    property double verticalRotationOffset: 0
-    property string rotationCenterHintId
-    readonly property double horizontalRotationCenter: {
-        if (svg.hasElement(rotationCenterHintId)) {
-            var hintedCenterRect = svg.elementRect(rotationCenterHintId),
-                handRect = svg.elementRect(elementId),
-                hintedX = hintedCenterRect.x - handRect.x + hintedCenterRect.width/2;
-            return Math.round(hintedX * svgScale) + Math.round(hintedX * svgScale) % 2;
-        }
-        return width/2;
-    }
-    readonly property double verticalRotationCenter: {
-        if (svg.hasElement(rotationCenterHintId)) {
-            var hintedCenterRect = svg.elementRect(rotationCenterHintId),
-                handRect = svg.elementRect(elementId),
-                hintedY = hintedCenterRect.y - handRect.y + hintedCenterRect.height/2;
-            return Math.round(hintedY * svgScale) + width % 2;
-        }
-        return width/2;
-    }
 
-    width: Math.round(naturalSize.width * svgScale) + Math.round(naturalSize.width * svgScale) % 2
-    height: Math.round(naturalSize.height * svgScale) + width % 2
+    anchors.centerIn: parent
 
-    property int horizOffset: Plasmoid.configuration.currentSkin == "System" ? 16 : 0
-
-    anchors {
-        top: clock.verticalCenter
-        topMargin: -verticalRotationCenter + verticalRotationOffset
-        left: clock.horizontalCenter
-        leftMargin: -horizontalRotationCenter + horizontalRotationOffset
-    }
-
-    svg: clockSvg
+    mirrorVertically: true
     transform: Rotation {
         id: rotation
         angle: 0
         origin {
-            x: handRoot.horizontalRotationCenter
-            y: handRoot.verticalRotationCenter
+            x: width / 2
+            y: height / 2
         }
         Behavior on angle {
             RotationAnimation {

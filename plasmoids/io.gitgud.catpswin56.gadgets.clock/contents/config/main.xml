@@ -9,8 +9,8 @@
     <entry name="showSecondHand" type="Bool">
       <default>false</default>
     </entry>
-    <entry name="currentSkin" type="String">
-      <default>Default</default>
+    <entry name="clockStyle" type="Int">
+      <default>0</default>
     </entry>
   </group>
 

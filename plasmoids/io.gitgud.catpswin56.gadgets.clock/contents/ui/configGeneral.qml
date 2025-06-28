@@ -14,7 +14,7 @@ import org.kde.kcmutils as KCM
 
 KCM.SimpleKCM {
     property alias cfg_showSecondHand: showSecondHand.checked
-    property alias cfg_currentSkin: currentSkin.currentText
+    property alias cfg_clockStyle: currentSkin.currentIndex
 
     component CustomGroupBox: GroupBox {
         id: gbox
@@ -42,6 +42,8 @@ KCM.SimpleKCM {
             radius: 3
         }
     }
+
+    Styles { id: styles }
 
     ColumnLayout {
         CustomGroupBox {
@@ -76,16 +78,21 @@ KCM.SimpleKCM {
                     Image {
                         anchors.centerIn: parent
 
-                        source: "previews/" + currentSkin.currentText + ".png"
+                        source: "clocks/" + currentSkin.currentText + "/preview.png"
                     }
                 }
 
                 ComboBox {
                     id: currentSkin
                     Layout.preferredWidth: 175
+                    currentIndex: Plasmoid.configuration.clockStyle
                     model: [
                         "Default",
-                        "System"
+                        "System",
+                        "Cronometer",
+                        "Diner",
+                        "Modern",
+                        "Square"
                     ]
                 }
             }
