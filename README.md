@@ -36,5 +36,6 @@ Available styles:
 
 
 ## TODO
-1. Calendar
-2. CPU usage
+1. Cleanup/rewrite the weather gadget code
+2. Calendar
+3. CPU usage
