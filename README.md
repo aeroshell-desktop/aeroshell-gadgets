@@ -20,19 +20,19 @@ Move the plasmoids folder to ```~/.local/share/plasma/``` and add the plasmoids 
 
 Available styles:
 
-![clock](screenshots/clock-styles.png)
+![clockstyles](screenshots/clock-styles.png)
 
 ### Weather
 
-![clock](screenshots/weather.png)
+![weather](screenshots/weather.png)
 
 ### Image slideshow
 
-![clock](screenshots/slideshow.png)
+![slideshow](screenshots/slideshow.png)
 
 ### RSS Feeds
 
-![clock](screenshots/rss.png)
+![rss](screenshots/rss.png)
 
 
 ## TODO
