@@ -1,0 +1,24 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "catpswin56"
+            }
+        ],
+        "Category": "Gadgets",
+        "Description": "I dont know",
+        "EnabledByDefault": true,
+        "FormFactors": [
+            "tablet",
+            "handset",
+            "desktop"
+        ],
+        "Icon": "notes-gadget",
+        "Id": "io.gitgud.catpswin56.gadgets.notes",
+        "License": "GPL-2.0+",
+        "Name": "Notes",
+        "Website": "https://gitgud.io/catpswin56/win-gadgets"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
