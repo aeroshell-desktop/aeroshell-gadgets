@@ -7,7 +7,14 @@ This repository contains (some) recreated Windows gadgets for use within KDE Pla
 
 
 ## Installation
-Move the ``plasmoids`` folder to ``~/.local/share/plasma/`` and add the plasmoids onto your desktop.
+1. Clone this repository
+2. Go into the repository folder and run
+```sh
+$ sh install.sh
+```
+to install the plasmoids into ``~/.local/share/plasma/plasmoids/`` automatically
+
+3. Add any of the plasmoids into your desktop
 
 
 ## Screenshots
@@ -16,7 +23,7 @@ Move the ``plasmoids`` folder to ``~/.local/share/plasma/`` and add the plasmoid
 
 ![clock](screenshots/clock.png)
 
-Available styles:
+**Available styles:**
 
 ![clockstyles](screenshots/clock-styles.png)
 
@@ -43,4 +50,5 @@ Available styles:
 1. Cleanup/rewrite the weather gadget code
 2. Calendar
 3. CPU usage
-4. Script for easier plasmoid installing
+4. Make the script also install the gadget icons
+5. Add more clock screenshots
