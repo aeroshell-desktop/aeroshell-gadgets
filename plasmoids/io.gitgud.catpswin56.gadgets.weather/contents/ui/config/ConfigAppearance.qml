@@ -14,12 +14,12 @@ import org.kde.plasma.private.weather
 import org.kde.kcmutils as KCM
 
 KCM.SimpleKCM {
-    property alias cfg_expanded: expanded.checked
+    property alias cfg_prefersExpanded: expanded.checked
 
     Kirigami.FormLayout {
         QQC2.CheckBox {
             id: expanded
-            text: "Expanded?"
+            text: "Use expanded variant"
         }
     }
 }

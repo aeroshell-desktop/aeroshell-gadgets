@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  * SPDX-FileCopyrightText: 2022 Ismael Asensio <isma.af@gmail.com>
+ * SPDX-FileCopyrightText: 2025 catpswin56 <>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,75 +19,59 @@ RowLayout {
 
     property alias model: repeater.model
     property var generalModel
-    property bool showNightRow: false
 
-    readonly property int preferredIconSize: 27
-    readonly property bool hasContent: model && model.length > 0
-
-    spacing: 0
-
-    // Add Day/Night labels as the row headings when there is a night row
-    component DayNightLabel: PlasmaComponents.Label {
-        visible: root.showNightRow
-        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-        Layout.fillWidth: true
-        Layout.preferredWidth: startsAtNight ? Kirigami.Units.largeSpacing : implicitWidth
-        font.bold: true
-    }
-
-    DayNightLabel {
-        text: i18nc("Time of the day (from the duple Day/Night)", "Day")
-    }
+    spacing: 8
 
     Repeater {
         id: repeater
 
-        delegate: ColumnLayout {
-            id: dayDelegate
-            width: 45
+        delegate: RowLayout {
+            id: delegate
 
-            RowLayout {
-                anchors.fill: parent
-                spacing: 0
+            width: 46
 
-                ColumnLayout {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
+            spacing: 7
 
-                    Text {
-                        Layout.fillWidth: true
+            ColumnLayout {
+                Layout.fillHeight: true
 
-                        text: modelData?.period?.replace(" nt", "") || ""
-                        color: "white"
-                        opacity: 0.7
-                        font.pointSize: 8
-                    }
+                spacing: 2
+                uniformCellSizes: true
 
-                    Text {
-                        Layout.fillWidth: true
+                opacity: 0.7
 
-                        text: modelData ? modelData.tempHigh || i18nc("Short for no data available", "-") : ""
-                        font.pointSize: 8
-                        opacity: 0.7
-                        color: "white"
-                    }
-                    Text {
-                        Layout.fillWidth: true
-
-                        text: modelData ? modelData.tempLow || i18nc("Short for no data available", "-") : ""
-                        font.pointSize: 8
-                        opacity: 0.7
-                        color: "white"
-                    }
+                Text {
+                    text: modelData?.period?.replace(" nt", "") || ""
+                    color: "white"
                 }
 
-                Kirigami.Icon {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: preferredIconSize
-                    Layout.preferredHeight: preferredIconSize
-
-                    source: modelData?.icon ?? ""
+                Text {
+                    text: modelData ? modelData.tempHigh || i18nc("Short for no data available", "-") : ""
+                    color: "white"
                 }
+                Text {
+                    text: modelData ? modelData.tempLow || i18nc("Short for no data available", "-") : ""
+                    color: "white"
+                }
+            }
+
+            Kirigami.Icon {
+                Layout.alignment: Qt.AlignBottom
+
+                Layout.preferredWidth: 27
+                Layout.preferredHeight: 27
+
+                source: modelData?.icon ?? ""
+            }
+
+            Image {
+                Layout.bottomMargin: 4
+
+                Layout.fillHeight: true
+
+                source: "resources/sep-vert.png"
+
+                visible: model.index != repeater.count - 1
             }
         }
     }

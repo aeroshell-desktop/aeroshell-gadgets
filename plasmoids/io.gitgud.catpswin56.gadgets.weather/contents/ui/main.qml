@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  * SPDX-FileCopyrightText: 2023 Ismael Asensio <isma.af@gmail.com>
+ * SPDX-FileCopyrightText: 2025 catpswin56 <>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,9 +19,6 @@ PlasmoidItem {
     id: root
 
     Plasmoid.backgroundHints: "NoBackground"
-
-    Layout.preferredWidth: Plasmoid.configuration.expanded ? 264 : 130
-    Layout.preferredHeight: Plasmoid.configuration.expanded ? 194 : 67
 
     readonly property bool inPanel: [
         PlasmaCore.Types.TopEdge,
@@ -240,6 +238,7 @@ PlasmoidItem {
                 probability: "",
                 tempHigh: "",
                 tempLow: "",
+                index: i - 1,
             }
 
             const forecastDayKey = "Short Forecast Day " + i;
@@ -354,12 +353,18 @@ PlasmoidItem {
 
         return iconName;
     }
-    Plasmoid.busy: status === Util.Connecting
     Plasmoid.configurationRequired: status === Util.NeedsConfiguration
     Plasmoid.status: status === Util.NeedsConfiguration ? PlasmaCore.Types.PassiveStatus : PlasmaCore.Types.ActiveStatus
 
-    Expanded { anchors.fill: parent; visible: Plasmoid.configuration.expanded }
-    Unexpanded { anchors.fill: parent; visible: !Plasmoid.configuration.expanded }
+    MainLayout {
+        id: layout
+
+        anchors.centerIn: parent
+
+        generalModel: root.generalModel
+        observationModel: root.observationModel
+        forecastModel: root.forecastModel
+    }
 
     onWeatherSourceChanged: if(weatherSource.length === 0) status = Util.NeedsConfiguration
     Component.onCompleted: weatherSourceChanged()

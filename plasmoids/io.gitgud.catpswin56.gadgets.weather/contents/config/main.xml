@@ -19,7 +19,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
   </group>
 
   <group name="Appearance">
-    <entry name="expanded" type="bool">
+    <entry name="prefersExpanded" type="bool">
       <default>false</default>
     </entry>
   </group>
