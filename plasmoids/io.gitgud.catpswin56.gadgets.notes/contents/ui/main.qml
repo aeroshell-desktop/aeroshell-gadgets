@@ -12,23 +12,6 @@ import org.kde.plasma.extras as PlasmaExtras
 PlasmoidItem {
     id: root
 
-    states: [
-        State {
-            when: Plasmoid.configuration.sizeMode !== 2
-            PropertyChanges {
-                target: root
-                width: note.width
-                height: note.height
-            }
-
-        }
-    ]
-
-    Layout.minimumWidth: 130
-    Layout.minimumHeight: 124
-
-    expandedOnDragHover: true
-
     readonly property color noteColor: Qt.hsla(Plasmoid.configuration.hue/360,
                                                Plasmoid.configuration.saturation/100,
                                                Plasmoid.configuration.lightness/100, 1.0)
@@ -42,6 +25,25 @@ PlasmoidItem {
         return yiq_y >= 0.5 ? "black" : "white"
     }
 
+    states: [
+        State {
+            when: Plasmoid.configuration.sizeMode !== 2
+
+            PropertyChanges {
+                target: root
+
+                width: note.width
+                height: note.height
+            }
+
+        }
+    ]
+
+    Layout.minimumWidth: 130
+    Layout.minimumHeight: 124
+
+    expandedOnDragHover: true
+
     Plasmoid.backgroundHints: "NoBackground"
 
     component CircleButton: MouseArea {
@@ -54,6 +56,7 @@ PlasmoidItem {
                 else return "-normal"
             } else return "-disabled"
         }
+
         property string controlType
 
         implicitWidth: 16
@@ -117,6 +120,8 @@ PlasmoidItem {
     Image {
         id: note
 
+        anchors.centerIn: parent
+
         readonly property string color: {
             switch(Plasmoid.configuration.preset) {
                 case 0:
@@ -147,17 +152,18 @@ PlasmoidItem {
     BorderImage {
         id: noteResizable
 
-        source: "../assets/notes/" + note.color + "expanded.png"
-
-        visible: Plasmoid.configuration.sizeMode === 2
         width: root.width
         height: root.height
 
-        border.bottom: 20
-        border.left: 11
-        border.top: 9
-        border.right: 17
+        border {
+            left: 11
+            right: 17
+            top: 9
+            bottom: 20
+        }
+        source: "../assets/notes/" + note.color + "expanded.png"
 
+        visible: Plasmoid.configuration.sizeMode === 2
         layer.enabled: Plasmoid.configuration.preset == 6
         layer.effect: MultiEffect {
             colorization: 0.8
@@ -168,18 +174,23 @@ PlasmoidItem {
     Item {
         id: contentArea
 
-        anchors.rightMargin: (Plasmoid.configuration.sizeMode === 2) ? 16 : 0
-        anchors.leftMargin: (Plasmoid.configuration.sizeMode === 2) ? 15 : 0
-        anchors.topMargin: (Plasmoid.configuration.sizeMode === 2) ? 8 : 0
-        anchors.bottomMargin: (Plasmoid.configuration.sizeMode === 2) ? 20 : 0
-        anchors.verticalCenterOffset: (Plasmoid.configuration.sizeMode !== 0) ? -6 : -4
-        anchors.horizontalCenterOffset: (Plasmoid.configuration.sizeMode !== 0) ? -3 : -1
+        anchors {
+            leftMargin: (Plasmoid.configuration.sizeMode === 2) ? 15 : 0
+            rightMargin: (Plasmoid.configuration.sizeMode === 2) ? 16 : 0
+            topMargin: (Plasmoid.configuration.sizeMode === 2) ? 8 : 0
+            bottomMargin: (Plasmoid.configuration.sizeMode === 2) ? 20 : 0
+
+            verticalCenterOffset: (Plasmoid.configuration.sizeMode !== 0) ? -6 : -4
+            horizontalCenterOffset: (Plasmoid.configuration.sizeMode !== 0) ? -3 : -1
+        }
 
         states: [
             State {
                 when: Plasmoid.configuration.sizeMode === 2
+
                 AnchorChanges {
                     target: contentArea
+
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -188,8 +199,10 @@ PlasmoidItem {
             },
             State {
                 when: Plasmoid.configuration.sizeMode !== 2
+
                 AnchorChanges {
                     target: contentArea
+
                     anchors.horizontalCenter: note.horizontalCenter
                     anchors.verticalCenter: note.verticalCenter
                 }
@@ -206,18 +219,21 @@ PlasmoidItem {
             id: contextMenu
 
             visualParent: textEdit
+
             PlasmaExtras.MenuItem {
                 enabled: textEdit.selectedText.length > 0 && !textEdit.readOnly
                 text: i18n("Cut")
                 icon: "edit-cut"
                 onClicked: textEdit.cut();
             }
+
             PlasmaExtras.MenuItem {
                 enabled: textEdit.selectedText.length > 0
                 text: i18n("Copy")
                 icon: "edit-copy"
                 onClicked: textEdit.copy();
             }
+
             PlasmaExtras.MenuItem {
                 enabled: textEdit.canPaste && !textEdit.readOnly
                 text: i18n("Paste")
@@ -227,9 +243,9 @@ PlasmoidItem {
                     scrollArea.scrollToCursor();
                 }
             }
-            PlasmaExtras.MenuItem {
-                separator: true
-            }
+
+            PlasmaExtras.MenuItem { separator: true }
+
             PlasmaExtras.MenuItem {
                 enabled: textEdit.canUndo && !textEdit.readOnly
                 text: i18n("Undo")
@@ -239,6 +255,7 @@ PlasmoidItem {
                     scrollArea.scrollToCursor();
                 }
             }
+
             PlasmaExtras.MenuItem {
                 enabled: textEdit.canRedo && !textEdit.readOnly
                 text: i18n("Redo")
@@ -248,12 +265,11 @@ PlasmoidItem {
                     scrollArea.scrollToCursor();
                 }
             }
+
             PlasmaExtras.MenuItem {
                 text: i18n("Select all")
                 onClicked: textEdit.selectAll();
             }
-
-
         }
 
         ColumnLayout {
@@ -303,6 +319,7 @@ PlasmoidItem {
                         font.family: textEdit.font.family
                         text: "    "
                     }
+
                     TextEdit {
                         id: textEdit
 
