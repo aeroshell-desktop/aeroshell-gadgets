@@ -11,7 +11,7 @@ PlasmaCore.Dialog {
     backgroundHints: PlasmaCore.Types.NoBackground
     location: "RightEdge"
 
-    property int itemIndex // to identify which item should have the selected state
+    property int itemIndex
     property string title: "undefined"
     property string link: "undefined"
     property string creator: "undefined"

@@ -12,7 +12,7 @@ import org.kde.plasma.plasmoid
 import org.kde.kirigami as Kirigami
 
 PlasmoidItem {
-    id: window
+    id: root
 
     Layout.preferredWidth: 130
     Layout.preferredHeight: 173
@@ -53,8 +53,14 @@ PlasmoidItem {
 
     XmlListModel {
         id: xmlModel
+
         source: url
         query: "/rss/channel/item"
+
+        onStatusChanged: {
+            list.visible = false
+            if(!noFeed.visible) busyIndicator.visible = true
+        }
 
         XmlListModelRole { name: "title"; elementName: "title" }
         XmlListModelRole { name: "pubDate"; elementName: "pubDate" }
@@ -62,11 +68,6 @@ PlasmoidItem {
         XmlListModelRole { name: "content"; elementName: "encoded" }
         XmlListModelRole { name: "description"; elementName: "description" }
         XmlListModelRole { name: "creator"; elementName: "creator" }
-
-        onStatusChanged: {
-            list.visible = false
-            busyIndicator.visible = true
-        }
     }
 
     Image {
@@ -106,9 +107,7 @@ PlasmoidItem {
 
                 spacing: -Kirigami.Units.smallSpacing
 
-                Item {
-                    Layout.fillHeight: true
-                }
+                Item { Layout.fillHeight: true }
 
                 Text {
                     id: titleText
@@ -127,9 +126,7 @@ PlasmoidItem {
                     font.bold: true
                 }
 
-                Item {
-                    Layout.preferredHeight: Kirigami.Units.smallSpacing*2
-                }
+                Item { Layout.preferredHeight: Kirigami.Units.smallSpacing*2 }
 
                 RowLayout {
                     Text {
@@ -170,9 +167,7 @@ PlasmoidItem {
                     }
                 }
 
-                Item {
-                    Layout.fillHeight: true
-                }
+                Item { Layout.fillHeight: true }
             }
 
             Rectangle {
@@ -197,7 +192,7 @@ PlasmoidItem {
                 acceptedButtons: Qt.LeftButton
 
                 onClicked: {
-                    moreFlyout.itemIndex = index // comment about this is in Flyout.qml
+                    moreFlyout.itemIndex = index // to identify which item should have the selected state
                     moreFlyout.title = title
                     moreFlyout.link = link
                     moreFlyout.creator = creator
@@ -369,6 +364,7 @@ PlasmoidItem {
         snapMode: ListView.SnapToItem
     }
 
+    // TODO: remove this once item sizes are fixed
     Rectangle {
         id: fadeGradient
 
@@ -404,14 +400,14 @@ PlasmoidItem {
 
         source: "resources/loading-circle/" + frameNumber
 
+        visible: false
+
         SequentialAnimation {
             running: true
             loops: Animation.Infinite
             NumberAnimation { target: busyIndicator; property: "frameNumber"; to: 17; duration: 900 }
             NumberAnimation { target: busyIndicator; property: "frameNumber"; to: 0; duration: 0 }
         }
-
-        onVisibleChanged: if(url == "") visible = false;
     }
 
     Flyout {
