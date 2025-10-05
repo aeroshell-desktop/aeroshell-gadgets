@@ -45,11 +45,14 @@ to install the plasmoids into ``~/.local/share/plasma/plasmoids/`` automatically
 
 ![notes](screenshots/notes.png)
 
+### CPU
+
+![cpu](screenshots/cpu.png)
+
 ## Credits
 * [WackyIdeas](https://gitgud.io/wackyideas/) for adding a context menu, automatic text colorization, resizing support and doing bugfixes to the notes gadget.
 
 ## TODO
 1. Calendar
-2. CPU usage
 3. Make the script also install the gadget icons
 4. Add more clock screenshots

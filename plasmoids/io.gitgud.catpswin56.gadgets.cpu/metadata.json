@@ -1,0 +1,24 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "catpswin56"
+            }
+        ],
+        "Category": "Utilities",
+        "Description": "A gadget that reports CPU and memory usage",
+        "EnabledByDefault": true,
+        "FormFactors": [
+            "tablet",
+            "handset",
+            "desktop"
+        ],
+        "Icon": "gadget-cpu",
+        "Id": "io.gitgud.catpswin56.gadgets.cpu",
+        "License": "GPL-2.0+",
+        "Name": "CPU",
+        "Website": "https://gitgud.io/catpswin56/win-gadgets"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
