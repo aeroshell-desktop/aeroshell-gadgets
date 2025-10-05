@@ -46,12 +46,12 @@ PlasmoidItem {
             var value;
 
             if(cmd == "top -bn1 | grep \"Cpu(s)\"") {
-                expression = /\d{2}/m;
+                expression = /\d{2}|\d{1}/m;
                 value = expression.exec(stdout);
                 root.cpu_usage = Math.round(Number(value[0]));
 
-            } else if(cmd == "free -h") {
-                expression = /(\d{1}.\d{1})/gm;
+            } else {
+                expression = /\d{1}.\d{1}|\d{2}/gm;
                 value = stdout.match(expression);
                 root.max_memory = Number(value[0]);
                 root.memory_usage = Number(value[1]);
