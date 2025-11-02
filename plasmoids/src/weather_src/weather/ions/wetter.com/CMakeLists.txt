@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2025 Bohdan Onofriichuk <bogdan.onofriuchuk@gmail.com>
+# SPDX-FileCopyrightText: 2025 catpswin56 <>
+# SPDX-License-Identifier: BSD-3-Clause
+
+kcoreaddons_add_plugin(wettercom INSTALL_NAMESPACE "catpswin56/weather-gadget/weather_ions")
+
+target_sources(wettercom PRIVATE
+    ion_wettercom.cpp
+    ion_wettercom.h
+)
+
+ecm_qt_declare_logging_category(wettercom
+    HEADER wettercom_debug.h
+    IDENTIFIER WEATHER::ION::WETTERCOM
+    CATEGORY_NAME io.gitgud.catpswin56.gadgets.weather.ion.wettercom
+    DEFAULT_SEVERITY Info
+    DESCRIPTION "wetter.com ion plugin"
+    EXPORT GADGET
+)
+
+target_link_libraries(wettercom PRIVATE
+    gadgetweatherion
+    KF6::KIOCore
+)
