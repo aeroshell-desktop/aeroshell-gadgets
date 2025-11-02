@@ -53,8 +53,8 @@ PlasmoidItem {
             } else {
                 expression = /\d{1}.\d{1}|\d{2}/gm;
                 value = stdout.match(expression);
-                root.max_memory = Number(value[0]);
-                root.memory_usage = Number(value[1]);
+                root.max_memory = Number(value[0].replace(',', '.'));
+                root.memory_usage = Number(value[1].replace(',', '.'));
 
             }
         }
