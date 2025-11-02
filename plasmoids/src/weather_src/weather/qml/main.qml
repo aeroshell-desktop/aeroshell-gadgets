@@ -38,8 +38,6 @@ PlasmoidItem {
         }
     }
 
-    Plasmoid.backgroundHints: PlasmaCore.Types.DefaultBackground | PlasmaCore.Types.ConfigurableBackground
-
     readonly property bool inPanel: [
         PlasmaCore.Types.TopEdge,
         PlasmaCore.Types.RightEdge,
@@ -79,6 +77,7 @@ PlasmoidItem {
         return windSpeedText;
     }
 
+    Plasmoid.backgroundHints: "NoBackground"
     Plasmoid.icon: {
         let iconName;
         if (status === ForecastControl.NeedsConfiguration) {
