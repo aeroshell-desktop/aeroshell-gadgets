@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Lars Pontoppidan <dev.larpon@gmail.com>
+ *  SPDX-FileCopyrightText: 2025 catpswin56 <catpswin5@proton.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,6 +21,12 @@ import org.kde.plasma.private.mediaframe
 
 PlasmoidItem {
     id: main
+
+    // BEGIN GADGET STUFF
+    readonly property string plasmoidType: "Gadget"
+    readonly property bool resizable: false
+    signal requestSizeUpdate()
+    // END GADGET STUFF
 
     MediaFrame {
         id: items

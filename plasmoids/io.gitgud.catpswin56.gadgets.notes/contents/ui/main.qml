@@ -12,6 +12,18 @@ import org.kde.plasma.extras as PlasmaExtras
 PlasmoidItem {
     id: root
 
+    // BEGIN GADGET STUFF
+    readonly property string plasmoidType: "Gadget"
+    readonly property bool resizable: Plasmoid.configuration.sizeMode === 2
+    signal requestSizeUpdate()
+
+    Connections {
+        target: Plasmoid.configuration
+
+        function onSizeModeChanged() { root.requestSizeUpdate(); }
+    }
+    // END GADGET STUFF
+
     readonly property color noteColor: Qt.hsla(Plasmoid.configuration.hue/360,
                                                Plasmoid.configuration.saturation/100,
                                                Plasmoid.configuration.lightness/100, 1.0)
@@ -32,15 +44,15 @@ PlasmoidItem {
             PropertyChanges {
                 target: root
 
-                width: note.width
-                height: note.height
+                Layout.minimumWidth: note.width
+                Layout.minimumHeight: note.height
             }
 
         }
     ]
 
-    Layout.minimumWidth: 130
-    Layout.minimumHeight: 124
+    Layout.minimumWidth: note.width
+    Layout.minimumHeight: note.height
 
     expandedOnDragHover: true
 
@@ -139,7 +151,7 @@ PlasmoidItem {
             }
         }
 
-        source: (Plasmoid.configuration.sizeMode !== 0) ? "../assets/notes/" + color + "expanded.png" : "../assets/notes/" + color + "normal.png"
+        source: (Plasmoid.configuration.sizeMode !== 1) ? "../assets/notes/" + color + "normal.png" : "../assets/notes/" + color + "expanded.png"
 
         visible: Plasmoid.configuration.sizeMode !== 2
         layer.enabled: Plasmoid.configuration.preset == 6

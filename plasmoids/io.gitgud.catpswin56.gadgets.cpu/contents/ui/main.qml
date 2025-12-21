@@ -7,6 +7,12 @@ import org.kde.plasma.plasma5support as Plasma5Support
 PlasmoidItem {
     id: root
 
+    // BEGIN GADGET STUFF
+    readonly property string plasmoidType: "Gadget"
+    readonly property bool resizable: false
+    signal requestSizeUpdate()
+    // END GADGET STUFF
+
     Layout.minimumWidth: 130
     Layout.minimumHeight: 103
     Layout.maximumWidth: 130

@@ -15,6 +15,12 @@ import org.kde.plasma.core as PlasmaCore
 PlasmoidItem {
     id: root
 
+    // BEGIN GADGET STUFF
+    readonly property string plasmoidType: "Gadget"
+    readonly property bool resizable: false
+    signal requestSizeUpdate()
+    // END GADGET STUFF
+
     Layout.minimumWidth: layout.width
     Layout.minimumHeight: layout.height
     Layout.maximumWidth: layout.width

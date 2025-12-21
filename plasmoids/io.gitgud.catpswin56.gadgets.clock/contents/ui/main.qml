@@ -2,6 +2,7 @@
     SPDX-FileCopyrightText: 2012 Viranch Mehta <viranch.mehta@gmail.com>
     SPDX-FileCopyrightText: 2012 Marco Martin <mart@kde.org>
     SPDX-FileCopyrightText: 2013 David Edmundson <davidedmundson@kde.org>
+    SPDX-FileCopyrightText: 2025 catpswin56 <catpswin5@proton.me>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -19,6 +20,12 @@ import org.kde.plasma.plasma5support as P5Support
 
 PlasmoidItem {
     id: analogclock
+
+    // BEGIN GADGET STUFF
+    readonly property string plasmoidType: "Gadget"
+    readonly property bool resizable: false
+    signal requestSizeUpdate()
+    // END GADGET STUFF
 
     Layout.minimumWidth: 124
     Layout.minimumHeight: 124

@@ -14,6 +14,12 @@ import org.kde.kirigami as Kirigami
 PlasmoidItem {
     id: root
 
+    // BEGIN GADGET STUFF
+    readonly property string plasmoidType: "Gadget"
+    readonly property bool resizable: false
+    signal requestSizeUpdate()
+    // END GADGET STUFF
+
     Layout.preferredWidth: 130
     Layout.preferredHeight: 173
 
