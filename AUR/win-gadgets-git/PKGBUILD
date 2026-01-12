@@ -1,0 +1,33 @@
+pkgname=win-gadgets-git
+pkgver=master
+_dirver=$(echo $pkgver | cut -d. -f1-3)
+pkgrel=0
+pkgdesc='Windows Gadgets for KDE Plasma 6'
+arch=(x86_64)
+url='https://gitgud.io/catpswin56/win-gadgets'
+license=(GPL-2.0+)
+depends=(gcc-libs glibc libplasma kholidays kunitconversion)
+makedepends=(extra-cmake-modules)
+conflicts=()
+replaces=()
+provides=()
+groups=(aerothemeplasma-extras)
+options=('!debug')
+source=("${pkgname}::git+${url}.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/${pkgname%}"
+  git rev-parse --short=10 HEAD | sed 's/^/r0./'
+}
+
+
+build() {
+  cmake -B build -S win-gadgets-git
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}
+
