@@ -51,9 +51,12 @@ PlasmoidItem {
             var expression;
             var value;
 
-            if(cmd == "top -bn1 | grep \"Cpu(s)\"") {
+            if(cmd == "LANG=C top -bn1 | grep \"Cpu(s)\"") {
                 expression = /\d{2}|\d{1}/m;
                 value = expression.exec(stdout);
+                console.log("cpu gadget logs:");
+                console.log("parameters:", cmd, exitCode, exitStatus, stderr, value);
+                console.log("stdout is:", stdout);
                 root.cpu_usage = Math.round(Number(value[0]));
 
             } else {
@@ -71,8 +74,8 @@ PlasmoidItem {
         running: true
         repeat: true
         onTriggered: {
-            executable.exec("top -bn1 | grep \"Cpu(s)\"");
-            executable.exec("free -h");
+            executable.exec("LANG=C top -bn1 | grep \"Cpu(s)\"");
+            executable.exec("LANG=C free -h");
         }
     }
 
