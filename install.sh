@@ -25,6 +25,10 @@ else
     echo "Compiling plasmoids..."
 
     for filename in "$PWD/plasmoids/src/"*; do
+        if [[ $(basename "$filename") == "CMakeLists.txt" ]]; then
+            continue
+        fi
+
         cd "$filename"
         echo "Compiling $(pwd)"
         sh $USE_SCRIPT $@
