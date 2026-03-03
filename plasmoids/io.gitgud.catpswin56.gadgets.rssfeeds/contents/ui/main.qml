@@ -14,12 +14,6 @@ import org.kde.kirigami as Kirigami
 PlasmoidItem {
     id: root
 
-    // BEGIN GADGET STUFF
-    readonly property string plasmoidType: "Gadget"
-    readonly property bool resizable: false
-    signal requestSizeUpdate()
-    // END GADGET STUFF
-
     Layout.preferredWidth: 130
     Layout.preferredHeight: 173
 
@@ -280,14 +274,14 @@ PlasmoidItem {
 
                 source: "resources/controls/down" + suffix
 
-                opacity: list.count > 3 && list.currentIndex < list.count ? 1 : 0.5
+                opacity: list.atYEnd ? 0.5 : 1
 
                 MouseArea {
                     id: downButtonMa
 
                     anchors.fill: parent
 
-                    visible: list.count > 3 && list.currentIndex < list.count
+                    visible: !list.atYEnd
 
                     hoverEnabled: true
 
@@ -296,6 +290,7 @@ PlasmoidItem {
                             return;
                         } else {
                             list.currentIndex += 3;
+                            if(list.currentIndex > list.count) list.currentIndex = list.count;
                             list.positionViewAtIndex(list.currentIndex, ListView.SnapPosition);
                         }
 
@@ -340,6 +335,7 @@ PlasmoidItem {
                             return;
                         } else {
                             list.currentIndex -= 3;
+                            if(list.currentIndex < 0) list.currentIndex = 0;
                             list.positionViewAtIndex(list.currentIndex, ListView.SnapPosition);
                         }
                     }
@@ -368,6 +364,7 @@ PlasmoidItem {
         model: xmlModel
         delegate: feedDelegate
         snapMode: ListView.SnapToItem
+        boundsBehavior: Flickable.StopAtBounds
     }
 
     // TODO: remove this once item sizes are fixed
@@ -393,7 +390,7 @@ PlasmoidItem {
 
         opacity: 0.6
 
-        visible: list.currentIndex < list.count && list.count != 0
+        visible: !list.atYEnd
     }
 
     Image  {
