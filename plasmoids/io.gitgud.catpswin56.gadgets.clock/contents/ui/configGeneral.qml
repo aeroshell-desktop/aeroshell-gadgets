@@ -11,10 +11,24 @@ import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.ksvg as KSvg
 import org.kde.kcmutils as KCM
+import org.kde.plasma.plasmoid
 
 KCM.SimpleKCM {
     property alias cfg_showSecondHand: showSecondHand.checked
-    property alias cfg_clockStyle: currentSkin.currentIndex
+    property alias cfg_showTimezoneString: showTimezoneString.checked
+    property alias cfg_clockStyle: currentSkin.currentValue
+
+    function basename(str)
+    {
+        return (str.slice(str.lastIndexOf("/")+1))
+    }
+
+    StylesSystem {
+        id: systemStyles
+        onModelUpdated: {
+            currentSkin.currentValue = Plasmoid.configuration.clockStyle.startsWith("clocks/") ? Plasmoid.configuration.clockStyle : systemStyles.associations[basename(Plasmoid.configuration.clockStyle)];
+        }
+    }
 
     component CustomGroupBox: GroupBox {
         id: gbox
@@ -43,8 +57,6 @@ KCM.SimpleKCM {
         }
     }
 
-    Styles { id: styles }
-
     ColumnLayout {
         CustomGroupBox {
             Layout.fillWidth: true
@@ -57,6 +69,10 @@ KCM.SimpleKCM {
                 CheckBox {
                     id: showSecondHand
                     text: i18n("Show seconds hand")
+                }
+                CheckBox {
+                    id: showTimezoneString
+                    text: i18n("Show timezone")
                 }
             }
         }
@@ -78,22 +94,17 @@ KCM.SimpleKCM {
                     Image {
                         anchors.centerIn: parent
 
-                        source: "clocks/" + currentSkin.currentText + "/preview.png"
+                        source: currentSkin.currentValue + "/preview.png"
                     }
                 }
 
                 ComboBox {
                     id: currentSkin
                     Layout.preferredWidth: 175
-                    currentIndex: Plasmoid.configuration.clockStyle
-                    model: [
-                        "Default",
-                        "System",
-                        "Cronometer",
-                        "Diner",
-                        "Modern",
-                        "Square"
-                    ]
+                    currentValue: Plasmoid.configuration.clockStyle
+                    model: systemStyles.styles
+                    valueRole: "value"
+                    textRole: "text"
                 }
             }
         }
