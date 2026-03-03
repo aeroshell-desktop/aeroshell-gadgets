@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Layouts
+import QtCore
 
 import org.kde.ksvg as KSvg
 import org.kde.kirigami as Kirigami
@@ -17,6 +18,7 @@ import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.plasma5support as P5Support
+import org.kde.plasma.clock
 
 PlasmoidItem {
     id: analogclock
@@ -32,8 +34,20 @@ PlasmoidItem {
     Layout.maximumWidth: 124
     Layout.maximumHeight: 124
 
-    readonly property string currentTime: Qt.locale().toString(dataSource.data["Local"]["DateTime"], Qt.locale().timeFormat(Locale.LongFormat))
-    readonly property string currentDate: Qt.locale().toString(dataSource.data["Local"]["DateTime"], Qt.locale().dateFormat(Locale.LongFormat).replace(/(^dddd.?\s)|(,?\sdddd$)/, ""))
+    Clock {
+        id: plasmaClock
+        trackSeconds: Plasmoid.configuration.showSecondHand
+    }
+
+    readonly property string currentTime: Qt.locale().toString(plasmaClock.dateTime, Qt.locale().timeFormat(Locale.LongFormat))
+    readonly property string currentDate: Qt.locale().toString(plasmaClock.dateTime, Qt.locale().dateFormat(Locale.LongFormat).replace(/(^dddd.?\s)|(,?\sdddd$)/, ""))
+
+    onCurrentTimeChanged: {
+        var date = plasmaClock.dateTime;
+        hours = date.getHours();
+        minutes = date.getMinutes();
+        seconds = date.getSeconds();
+    }
 
     property int hours
     property int minutes
@@ -42,35 +56,38 @@ PlasmoidItem {
     property bool showTimezone: Plasmoid.configuration.showTimezoneString
     property int tzOffset
 
+    property string themePath: Plasmoid.configuration.clockStyle
+
     Plasmoid.backgroundHints: "NoBackground";
-
-    function dateTimeChanged() {
-        var currentTZOffset = dataSource.data["Local"]["Offset"] / 60;
-        if (currentTZOffset !== tzOffset) {
-            tzOffset = currentTZOffset;
-            Date.timeZoneUpdated(); // inform the QML JS engine about TZ change
-        }
-    }
-
-    P5Support.DataSource {
-        id: dataSource
-        engine: "time"
-        connectedSources: "Local"
-        interval: showSecondsHand || (analogclock.compactRepresentationItem && analogclock.compactRepresentationItem.containsMouse) ? 1000 : 30000
-        onDataChanged: {
-            var date = new Date(data["Local"]["DateTime"]);
-            hours = date.getHours();
-            minutes = date.getMinutes();
-            seconds = date.getSeconds();
-        }
-        Component.onCompleted: dataChanged();
-    }
 
     Accessible.name: Plasmoid.title
     Accessible.description: i18nc("@info:tooltip", "Current time is %1; Current date is %2", analogclock.currentTime, analogclock.currentDate)
     Accessible.role: Accessible.Button
 
-    Styles { id: styles }
+    function basename(str)
+    {
+        return (str.slice(str.lastIndexOf("/")+1))
+    }
+
+
+    KSvg.FrameSvgItem {
+        id: errorMessage
+
+        anchors.fill: parent
+        visible: face.status == Image.Error
+
+        imagePath: "widgets/background"
+
+        PlasmaComponents.Label {
+            id: errorText
+            anchors.fill: parent
+            anchors.margins: Kirigami.Units.largeSpacing
+            wrapMode: Text.Wrap
+            text: i18n("Failed to load theme %1 properly!", basename(themePath))
+            textFormat: Text.PlainText
+        }
+        z: 99
+    }
 
     Item {
         id: clock
@@ -80,37 +97,43 @@ PlasmoidItem {
         Image {
             id: face
             anchors.centerIn: parent
-            source: "clocks/" + styles.currentStyle.styleName + "/clock.png"
+            source: themePath.startsWith("clocks/") ? themePath + "/clock.png" :
+                    StandardPaths.locate(StandardPaths.GenericDataLocation, "win-gadgets/clockfaces/"+basename(themePath)+"/clock.png")
         }
 
         Hand {
             id: hourHand
             rotation: 180 + hours * 30 + (minutes/2)
-            source: "clocks/" + styles.currentStyle.styleName + "/hour.png"
+            source: themePath.startsWith("clocks/") ? themePath + "/hour.png" :
+                    StandardPaths.locate(StandardPaths.GenericDataLocation, "win-gadgets/clockfaces/"+basename(themePath)+"/hour.png")
         }
 
         Hand {
             id: minuteHand
             rotation: 180 + minutes * 6
-            source: "clocks/" + styles.currentStyle.styleName + "/minute.png"
+            source: themePath.startsWith("clocks/") ? themePath + "/minute.png" :
+                    StandardPaths.locate(StandardPaths.GenericDataLocation, "win-gadgets/clockfaces/"+basename(themePath)+"/minute.png")
         }
 
         Hand {
             id: secondHand
             visible: showSecondsHand
             rotation: 180 + seconds * 6
-            source: "clocks/" + styles.currentStyle.styleName + "/second.png"
+            source: themePath.startsWith("clocks/") ? themePath + "/second.png" :
+                    StandardPaths.locate(StandardPaths.GenericDataLocation, "win-gadgets/clockfaces/"+basename(themePath)+"/second.png")
         }
 
         Image {
             anchors.centerIn: face
-            source: "clocks/" + styles.currentStyle.styleName + "/pin.png"
+            source: themePath.startsWith("clocks/") ? themePath + "/pin.png" :
+                    StandardPaths.locate(StandardPaths.GenericDataLocation, "win-gadgets/clockfaces/"+basename(themePath)+"/pin.png")
         }
 
         Image {
             anchors.centerIn: face
-            source: "clocks/" + styles.currentStyle.styleName + "/shine.png"
-            visible: clockStyles.currentStyle.hasShine
+            source: themePath.startsWith("clocks/") ? themePath + "/shine.png" :
+                    StandardPaths.locate(StandardPaths.GenericDataLocation, "win-gadgets/clockfaces/"+basename(themePath)+"/shine.png")
+            visible: status == Image.Ready
         }
     }
 
@@ -119,8 +142,7 @@ PlasmoidItem {
 
         anchors {
             horizontalCenter: parent.horizontalCenter
-            bottom: parent.bottom
-            bottomMargin: 10
+            top: parent.bottom
         }
         width: childrenRect.width + margins.right + margins.left
         height: childrenRect.height + margins.top + margins.bottom
@@ -132,13 +154,8 @@ PlasmoidItem {
             id: timezoneText
             x: timezoneBg.margins.left
             y: timezoneBg.margins.top
-            text: dataSource.data["Local"]["Timezone"]
+            text: plasmaClock.timeZoneName
             textFormat: Text.PlainText
         }
-    }
-
-    Component.onCompleted: {
-        tzOffset = new Date().getTimezoneOffset();
-        dataSource.onDataChanged.connect(dateTimeChanged);
     }
 }
