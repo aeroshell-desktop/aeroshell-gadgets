@@ -1,1 +1,2 @@
 add_subdirectory(weather_src)
+add_subdirectory(slideshow_src)

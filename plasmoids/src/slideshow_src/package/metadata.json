@@ -1,0 +1,19 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "catpswin5@proton.me",
+                "Name": "catpswin56"
+            }
+        ],
+        "Category": "Utilities",
+        "Description": "Show a continuous presentation of your images",
+        "Icon": "image-x-generic",
+        "Id": "io.gitgud.catpswin56.gadgets.slideshow",
+        "License": "AGPL-3.0+",
+        "Name": "Slideshow",
+        "Website": "https://gitgud.io/catpswin56/win-gadgets"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

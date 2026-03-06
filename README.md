@@ -63,8 +63,8 @@ to install the plasmoids into ``~/.local/share/plasma/plasmoids/`` automatically
 
 ## TODO
 
-1. Improve the install guide
-2. Calendar
-3. Make the script also install the gadget icons
-4. Add more clock screenshots
-5. Add the missing clock styles
+- [ ] Improve the install guide
+- [ ] Calendar
+- [ ] Make the script also install the gadget icons
+- [ ] Add more clock screenshots
+- [ ] Add the missing clock styles

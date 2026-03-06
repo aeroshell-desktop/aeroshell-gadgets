@@ -5,7 +5,6 @@ set(plasmoids
     io.gitgud.catpswin56.gadgets.cpu
     io.gitgud.catpswin56.gadgets.notes
     io.gitgud.catpswin56.gadgets.rssfeeds
-    io.gitgud.catpswin56.gadgets.slideshow
 )
 
 foreach(plasmoid IN LISTS plasmoids)
