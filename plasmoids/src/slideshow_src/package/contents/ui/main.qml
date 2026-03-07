@@ -22,6 +22,8 @@ PlasmoidItem {
     readonly property int topBorder: 5
     readonly property int bottomBorder: 5
 
+    property bool inSidebar: false
+
     Layout.minimumWidth: 130
     Layout.minimumHeight: 100
 
@@ -62,8 +64,6 @@ PlasmoidItem {
     BorderImage {
         id: background
 
-        anchors.fill: parent
-
         border {
             left: root.leftBorder
             right: root.rightBorder
@@ -71,13 +71,55 @@ PlasmoidItem {
             bottom: root.bottomBorder
         }
         source: "resources/background.png"
+
+        states: [
+            State {
+                name: "normal"
+                when: !root.inSidebar
+
+                AnchorChanges {
+                    target: background
+
+                    anchors.left: root.left
+                    anchors.right: root.right
+                    anchors.top: root.top
+                    anchors.bottom: root.bottom
+
+                    anchors.verticalCenter: undefined
+                    anchors.horizontalCenter: undefined
+                }
+            },
+            State {
+                name: "inSidebar"
+                when: root.inSidebar
+
+                AnchorChanges {
+                    target: background
+
+                    anchors.left: undefined
+                    anchors.right: undefined
+                    anchors.top: undefined
+                    anchors.bottom: undefined
+
+                    anchors.verticalCenter: root.verticalCenter
+                    anchors.horizontalCenter: root.horizontalCenter
+                }
+
+                PropertyChanges {
+                    target: background
+
+                    width: 130
+                    height: 100
+                }
+            }
+        ]
     }
 
     Item {
         id: contents
 
         anchors {
-            fill: parent
+            fill: background
 
             leftMargin: root.leftBorder
             rightMargin: root.rightBorder
