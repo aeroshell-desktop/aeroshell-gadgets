@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 
 import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
 
 import io.gitgud.catpswin56.gadgets.slideshow
 
@@ -23,6 +24,8 @@ PlasmoidItem {
 
     Layout.minimumWidth: 134
     Layout.minimumHeight: 104
+
+    Plasmoid.backgroundHints: PlasmaCore.Types.NoBackground
 
     component MediaControl: MouseArea {
         id: ma
