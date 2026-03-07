@@ -17,13 +17,13 @@ PlasmoidItem {
     signal requestSizeUpdate()
     // END GADGET STUFF
 
-    readonly property int leftBorder: 5
-    readonly property int rightBorder: 7
+    readonly property int leftBorder: 4
+    readonly property int rightBorder: 6
     readonly property int topBorder: 5
-    readonly property int bottomBorder: 7
+    readonly property int bottomBorder: 5
 
-    Layout.minimumWidth: 134
-    Layout.minimumHeight: 104
+    Layout.minimumWidth: 130
+    Layout.minimumHeight: 100
 
     Plasmoid.backgroundHints: PlasmaCore.Types.NoBackground
 
