@@ -1,12 +1,12 @@
 # Maintainer: catpswin56 <catpswin5@proton.me>
 
 pkgname=('win-gadgets-git')
-pkgver=_38.rb0ed9de
+pkgver=6.6.2_39.raa27c49
 pkgrel=1
 pkgdesc="A recreation of the Windows Gadgets for AeroShell-based desktops"
 arch=(x86_64)
 url="https://gitgud.io/catpswin56/win-gadgets"
-license=('GPL-3.0-or-later')
+license=('AGPL-3.0-or-later')
 depends=(gcc-libs
          glibc
          libstdc++
@@ -26,7 +26,7 @@ provides=(win-gadgets-git)
 
 pkgver() {
   cd "$srcdir/${pkgname%}"
-  echo "$(grep 'set(PROJECT_VERSION ' CMakeLists.txt | cut -d '"' -f 2)_$(git rev-list --count HEAD).r$(git rev-parse --short HEAD)"
+  echo "$(grep 'set(PROJECT_VERSION ' CMakeLists.txt | cut -d '' -f 2 | cut -d ')' -f 1)_$(git rev-list --count HEAD).r$(git rev-parse --short HEAD)"
 }
 
 build() {
