@@ -1,3 +1,4 @@
+# Contributor: WackyIdeas <wackyideas@disroot.org>
 # Maintainer: catpswin56 <catpswin5@proton.me>
 
 pkgname=('win-gadgets-git')
@@ -7,22 +8,27 @@ pkgdesc="A recreation of the Windows Gadgets for AeroShell-based desktops"
 arch=(x86_64)
 url="https://gitgud.io/catpswin56/win-gadgets"
 license=('AGPL-3.0-or-later')
-depends=(gcc-libs
-         glibc
+depends=(glibc
          libstdc++
-         kconfig
          kcoreaddons
          ki18n
          kirigami
          qt6-base
-         qt6-declarative)
+         qt6-declarative
+         qt6-5compat
+         kio
+         kcmutils
+         plasma5support
+         libplasma
+         ksvg
+         kunitconversion
+         kholidays
+         plasma-workspace)
 makedepends=(git
              extra-cmake-modules)
 options=('!debug')
 source=("${pkgname}::git+${url}.git")
 sha256sums=('SKIP')
-conflicts=(win-gadgets-git)
-provides=(win-gadgets-git)
 groups=(aerothemeplasma-extras
         vistathemeplasma-extras)
 
