@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
- * SPDX-FileCopyrightText: 2025 catpswin56 <>
+ * SPDX-FileCopyrightText: 2026 catpswin56 <catpswin56@proton.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -17,13 +17,16 @@ import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
 
 Item {
-    id: root
+    id: layoutRoot
 
-    readonly property bool isTemperaturePresent: !!root.lastObservation?.temperature && !!root.metaData?.temperatureUnit
+    readonly property bool isTemperaturePresent: lastObservation?.temperature && metaData?.temperatureUnit
 
-    readonly property string currentWeather: (Plasmoid.configuration.prefersExpanded ? "expanded-" : "unexpanded-") + Plasmoid.icon + ".png"
+    readonly property string currentWeather: (Plasmoid.configuration.prefersExpanded ? "expanded-" : "unexpanded-") + Plasmoid.icon
+    onCurrentWeatherChanged: root.requestSizeUpdate();
 
-    readonly property bool available: (root.lastObservation?.temperature ?? 0) != "" && location != "" && Plasmoid.icon != "weather-not-available"
+    readonly property bool available: isTemperaturePresent && !Plasmoid.configurationRequired
+
+    readonly property bool missingTexture: background.status == Image.Error
 
     readonly property var currentWeatherTextColor: {
         // light backgrounds
@@ -63,23 +66,9 @@ Item {
 
     Image {
         id: background
-
-        source: currentWeather
-
-        PlasmaExtras.PlaceholderMessage {
-            anchors.centerIn: background
-            // when not in panel, a configure button is already shown for needsConfiguration
-            visible: (root.status === Util.NeedsConfiguration) && (Plasmoid.formFactor === PlasmaCore.Types.Vertical || Plasmoid.formFactor === PlasmaCore.Types.Horizontal)
-            iconName: "mark-location"
-            text: i18n("Please set your location")
-            helpfulAction: QQC2.Action {
-                icon.name: "configure"
-                text: i18n("Set location…")
-                onTriggered: {
-                    Plasmoid.internalAction("configure").trigger();
-                }
-            }
-        }
+        source: !layoutRoot.available
+                ? (Plasmoid.configuration.prefersExpanded ? "expanded-" : "unexpanded-") + "weather-not-available"
+                : layoutRoot.currentWeather
     }
 
     RowLayout {
@@ -87,7 +76,7 @@ Item {
 
         anchors.fill: parent
 
-        visible: !root.available
+        visible: !layoutRoot.available
 
         Item { Layout.fillWidth: true }
 
@@ -99,9 +88,9 @@ Item {
 
     ColumnLayout {
         anchors {
-            left: background.left
-            right: background.right
-            top: background.top
+            left: parent.left
+            right: parent.right
+            top: parent.top
 
             leftMargin: Plasmoid.configuration.prefersExpanded ? 14 : 9
             rightMargin: Plasmoid.configuration.prefersExpanded ? 23 : 7
@@ -118,12 +107,18 @@ Item {
             Layout.fillWidth: true
 
             elide: Text.ElideRight
-            text: root.isTemperaturePresent ? Util.temperatureToDisplayString(root.displayTemperatureUnit, root.lastObservation.temperature, root.metaData.temperatureUnit, true, false) : ""
+            text: layoutRoot.isTemperaturePresent
+                    ? Util.temperatureToDisplayString(layoutRoot.displayTemperatureUnit,
+                                                      layoutRoot.lastObservation.temperature,
+                                                      layoutRoot.metaData.temperatureUnit,
+                                                      true,
+                                                      false)
+                    : ""
             font.pointSize: 16
-            color: typeof currentWeatherTextColor[Plasmoid.icon] != "undefined" ? currentWeatherTextColor[Plasmoid.icon] : "black" // fallback
+            color: currentWeatherTextColor[Plasmoid.icon] ? currentWeatherTextColor[Plasmoid.icon] : "black" // fallback
             horizontalAlignment: Text.AlignRight
 
-            visible: root.available
+            visible: layoutRoot.available
         }
         Text {
             id: location
@@ -133,12 +128,12 @@ Item {
             Layout.fillWidth: true
 
             elide: Text.ElideRight
-            text: root.location
+            text: layoutRoot.location
             font.pointSize: 9
-            color: typeof currentWeatherTextColor[Plasmoid.icon] != "undefined" ? currentWeatherTextColor[Plasmoid.icon] : "black"
+            color: currentWeatherTextColor[Plasmoid.icon] ? currentWeatherTextColor[Plasmoid.icon] : "black"
             horizontalAlignment: Text.AlignRight
 
-            visible: root.available
+            visible: layoutRoot.available
         }
 
         ColumnLayout {
@@ -159,9 +154,9 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                futureDays: root.futureDays
-                metaData: root.metaData
-                displayTemperatureUnit: root.displayTemperatureUnit
+                futureDays: layoutRoot.futureDays
+                metaData: layoutRoot.metaData
+                displayTemperatureUnit: layoutRoot.displayTemperatureUnit
             }
 
             PlasmaComponents.Label {
@@ -181,10 +176,10 @@ Item {
                     let result = "";
                     if (!!metaData?.credit) {
                         if (!!metaData.creditURL) {
-                            result = "<a href=\"" + root.metaData.creditURL + "\">" + root.metaData.credit + "</a>";
+                            result = "<a href=\"" + layoutRoot.metaData.creditURL + "\">" + layoutRoot.metaData.credit + "</a>";
                             font.underline = true;
                         } else {
-                            result = root.metaData.credit;
+                            result = layoutRoot.metaData.credit;
                         }
                     }
                     return result;

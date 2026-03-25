@@ -1,13 +1,16 @@
 /*
  * SPDX-FileCopyrightText: 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  * SPDX-FileCopyrightText: 2023 Ismael Asensio <isma.af@gmail.com>
- * SPDX-FileCopyrightText: 2025 catpswin56 <>
+ * SPDX-FileCopyrightText: 2026 catpswin56 <catpswin56@proton.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 import QtQuick
 import QtQuick.Layouts
+
+import org.kde.ksvg as KSvg
+import org.kde.kirigami as Kirigami
 
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
@@ -21,10 +24,8 @@ PlasmoidItem {
     signal requestSizeUpdate()
     // END GADGET STUFF
 
-    Layout.minimumWidth: layout.width
-    Layout.minimumHeight: layout.height
-    Layout.maximumWidth: layout.width
-    Layout.maximumHeight: layout.height
+    Layout.minimumWidth:  layout.width  < 130 ? 130 : layout.width
+    Layout.minimumHeight: layout.height < 67  ? 67  : layout.height
 
     ForecastControl {
         id: forecastControl
@@ -168,6 +169,24 @@ PlasmoidItem {
         return tooltips.join("\n");
     }
 
+    KSvg.FrameSvgItem {
+        anchors.fill: parent
+
+        imagePath: "widgets/background"
+
+        visible: layout.missingTexture
+
+        Text {
+            anchors.fill: parent
+            anchors.margins: Kirigami.Units.largeSpacing
+
+            wrapMode: Text.WordWrap
+            text: i18n("Missing texture for state: \"%1\"", layout.currentWeather)
+            textFormat: Text.PlainText
+            color: "white"
+        }
+    }
+
     MainLayout {
         id: layout
 
@@ -178,5 +197,7 @@ PlasmoidItem {
         location: forecastControl.forecast?.station?.place ?? ""
         futureDays: forecastControl.forecast?.futureDays
         displayTemperatureUnit: root.displayTemperatureUnit
+
+        visible: !missingTexture
     }
 }

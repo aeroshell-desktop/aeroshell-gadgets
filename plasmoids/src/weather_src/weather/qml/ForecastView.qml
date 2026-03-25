@@ -1,7 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  * SPDX-FileCopyrightText: 2022 Ismael Asensio <isma.af@gmail.com>
- * SPDX-FileCopyrightText: 2025 catpswin56 <>
+ * SPDX-FileCopyrightText: 2026 catpswin56 <catpswin56@proton.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,9 +10,7 @@ import QtQuick
 
 import QtQuick.Layouts
 
-import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.components as PlasmaComponents
 
 RowLayout {
     id: viewRoot
@@ -20,7 +18,6 @@ RowLayout {
     property var metaData: null
     property int displayTemperatureUnit: 0
     property var futureDays: null
-    onFutureDaysChanged: console.log(futureDays)
 
     spacing: 6
 
@@ -34,7 +31,7 @@ RowLayout {
             width: 46
             spacing: 7
 
-            visible: !!model.conditionIcon && (model.index !== 0 && !root.forecast?.currentDay)
+            visible: model.conditionIcon && (model.index !== 0 && !root.forecast?.currentDay)
 
             ColumnLayout {
                 Layout.fillHeight: true
@@ -43,20 +40,35 @@ RowLayout {
                 uniformCellSizes: true
 
                 Text {
-                    text: !!model.highTemp && !!viewRoot.metaData?.temperatureUnit ? Util.temperatureToDisplayString(viewRoot.displayTemperatureUnit, model.highTemp, root.metaData.temperatureUnit, true) : i18nc("Short for no data available", "-")
+                    text: model.highTemp && viewRoot.metaData?.temperatureUnit
+                            ? Util.temperatureToDisplayString(viewRoot.displayTemperatureUnit,
+                                                              model.highTemp,
+                                                              viewRoot.metaData.temperatureUnit,
+                                                              true)
+                            : i18nc("Short for no data available", "-")
                     color: "white"
                 }
 
                 Text {
-                    text: !!model.highTemp && !!viewRoot.metaData?.temperatureUnit ? Util.temperatureToDisplayString(viewRoot.displayTemperatureUnit, model.highTemp, root.metaData.temperatureUnit, true) : i18nc("Short for no data available", "-")
+                    text: model.highTemp && metaData?.temperatureUnit
+                            ? Util.temperatureToDisplayString(viewRoot.displayTemperatureUnit,
+                                                              model.highTemp,
+                                                              viewRoot.metaData.temperatureUnit,
+                                                              true)
+                            : i18nc("Short for no data available", "-")
                     color: "white"
-                    visible: !!model.highTemp || !repeater.model.isNightPresent
+                    visible: model.highTemp || !repeater.model.isNightPresent
                     opacity: 0.7
                 }
                 Text {
-                    text: !!model.lowTemp && !!viewRoot.metaData?.temperatureUnit ? Util.temperatureToDisplayString(viewRoot.displayTemperatureUnit, model.lowTemp, root.metaData.temperatureUnit, true) : i18nc("Short for no data available", "-")
+                    text: model.lowTemp && viewRoot.metaData?.temperatureUnit
+                            ? Util.temperatureToDisplayString(viewRoot.displayTemperatureUnit,
+                                                              model.lowTemp,
+                                                              viewRoot.metaData.temperatureUnit,
+                                                              true)
+                            : i18nc("Short for no data available", "-")
                     color: "white"
-                    visible: !!model.lowTemp || !repeater.model.isNightPresent
+                    visible: model.lowTemp || !repeater.model.isNightPresent
                     opacity: 0.7
                 }
             }
