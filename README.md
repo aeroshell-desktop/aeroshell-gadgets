@@ -1,10 +1,11 @@
-# Win Gadgets
+# AeroShell Gadgets
 
-## Microsoft® Windows™ is a registered trademark of Microsoft® Corporation. This name is used for referential use only, and does not aim to usurp copyrights from Microsoft. Microsoft Ⓒ 2025 All rights reserved. All resources belong to Microsoft Corporation.
+> [!IMPORTANT]
+> Microsoft® Windows™ is a registered trademark of Microsoft® Corporation. This name is used for referential use only, and does not aim to usurp copyrights from Microsoft. Microsoft Ⓒ 2026 All rights reserved. All resources belong to Microsoft Corporation.
 
 ## Introduction
 
-This repository contains (some) recreated Windows gadgets for use within KDE Plasma 6, specifically [VistaThemePlasma](https://gitgud.io/catpswin56/vistathemeplasma) and [AeroThemePlasma](https://gitgud.io/wackyideas/aerothemeplasma). Some gadgets are missing their expanded variants or have some slight inaccuracies.
+This repository contains (some) recreated Windows gadgets for use within AeroShell themes like [AeroThemePlasma](https://gitgud.io/aeroshell/atp/aerothemeplasma) and [VistaThemePlasma](https://gitgud.io/vtp/vistathemeplasma).
 
 ## Installation
 
@@ -20,13 +21,12 @@ This repository contains (some) recreated Windows gadgets for use within KDE Pla
 
 1. Clone this repository
 2. Go into the repository folder and run
-```sh
-$ sh install.sh
+```bash
+$ bash install.sh
 ```
 to install the plasmoids into ``~/.local/share/plasma/plasmoids/`` automatically
 
 3. Add any of the plasmoids into your desktop
-
 
 ## Screenshots
 
